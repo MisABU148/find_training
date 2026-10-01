@@ -5,6 +5,8 @@ const links = [
   { to: '/coaches', label: 'Тренеры' },
   { to: '/sports', label: 'Виды спорта' },
   { to: '/users', label: 'Пользователи' },
+  { to: '/booking', label: 'Запись на тренировку' },
+  { to: '/my-bookings', label: 'Мои записи' },
   { to: '/register', label: 'Регистрация' },
 ]
 

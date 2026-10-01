@@ -5,6 +5,8 @@ import CoachesPage from './pages/CoachesPage'
 import SportsPage from './pages/SportsPage'
 import UsersPage from './pages/UsersPage'
 import RegisterPage from './pages/RegisterPage'
+import BookingPage from './pages/BookingPage'
+import MyBookingsPage from './pages/MyBookingsPage'
 import './App.css'
 
 function App() {
@@ -18,6 +20,8 @@ function App() {
           <Route path="/coaches" element={<CoachesPage />} />
           <Route path="/sports" element={<SportsPage />} />
           <Route path="/users" element={<UsersPage />} />
+          <Route path="/booking" element={<BookingPage />} />
+          <Route path="/my-bookings" element={<MyBookingsPage />} />
           <Route path="/register" element={<RegisterPage />} />
         </Routes>
       </main>
