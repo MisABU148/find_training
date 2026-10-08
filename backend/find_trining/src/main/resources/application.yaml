@@ -2,22 +2,20 @@ spring:
   application:
     name: ${APP_NAME:find_trining}
 
-  # Фактор IX (Disposability): даём приложению корректно завершить
-  # начатые запросы и закрыть пул соединений перед остановкой.
   lifecycle:
     timeout-per-shutdown-phase: 20s
 
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/appdb}
+    username: ${DB_USERNAME:app}
+    password: ${DB_PASSWORD:app}
     hikari:
       maximum-pool-size: ${DB_POOL_MAX:10}
       minimum-idle: ${DB_POOL_MIN:2}
 
   jpa:
     hibernate:
-      ddl-auto: ${JPA_DDL_AUTO:validate}
+      ddl-auto: ${JPA_DDL_AUTO:none}
     open-in-view: false
     properties:
       hibernate:
@@ -25,10 +23,8 @@ spring:
         jdbc:
           time_zone: UTC
 
-  # Фактор XII (Admin processes): миграции выполняются самим приложением
-  # при старте, отдельного ручного шага не требуется.
   flyway:
-    enabled: ${FLYWAY_ENABLED:true}
+    enabled: true
     locations: classpath:db/migration
 
 server:
@@ -38,12 +34,11 @@ server:
     threads:
       max: ${SERVER_THREADS_MAX:200}
 
-# Фактор XI (Logs): пишем только в stdout (event stream), без файловых
-# аппендеров - куда эти логи попадут дальше, решает среда выполнения,
-# а не приложение.
 logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n"
   level:
     root: ${LOG_LEVEL_ROOT:INFO}
     m.ilyina.find_trining: ${LOG_LEVEL_APP:DEBUG}
+    org.flywaydb: DEBUG
+    org.springframework.boot.autoconfigure.flyway: DEBUG
