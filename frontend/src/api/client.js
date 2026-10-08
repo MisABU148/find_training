@@ -1,4 +1,4 @@
-const BASE_URL = '/api'
+    const BASE_URL = '/api'
 
 /**
  * Тонкая обёртка над fetch, заточенная под формат ошибок бэкенда
