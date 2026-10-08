@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import m.ilyina.find_trining.dto.coach.CoachCreateRequest;
 import m.ilyina.find_trining.dto.coach.CoachResponse;
 import m.ilyina.find_trining.dto.coach.CoachUpdateRequest;
-import m.ilyina.find_trining.service.impl.CoachService;
+import m.ilyina.find_trining.service.CoachService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
