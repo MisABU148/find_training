@@ -35,10 +35,14 @@ server:
       max: ${SERVER_THREADS_MAX:200}
 
 logging:
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n"
   level:
     root: ${LOG_LEVEL_ROOT:INFO}
     m.ilyina.find_trining: ${LOG_LEVEL_APP:DEBUG}
     org.flywaydb: DEBUG
     org.springframework.boot.autoconfigure.flyway: DEBUG
+  structured:
+    format:
+      console: ecs
+    ecs:
+      service:
+        name: ${APP_NAME:find_trining}
