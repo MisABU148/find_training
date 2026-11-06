@@ -46,3 +46,9 @@ logging:
     ecs:
       service:
         name: ${APP_NAME:find_trining}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus

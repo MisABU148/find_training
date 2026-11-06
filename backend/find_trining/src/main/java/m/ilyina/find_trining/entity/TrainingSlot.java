@@ -18,11 +18,6 @@ import lombok.Setter;
 import java.time.Instant;
 import java.time.LocalDateTime;
 
-/**
- * One concrete, dated hour of training at a gym, "rented" by a coach.
- * Business hours (Mon-Fri, 10:00-23:00, on the hour) are enforced in the
- * service layer, not here - the entity only models the shape of the data.
- */
 @Entity
 @Table(name = "training_slots", uniqueConstraints = {
         @UniqueConstraint(name = "uq_training_slots_gym_time", columnNames = {"gym_id", "starts_at"}),

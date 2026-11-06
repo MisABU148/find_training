@@ -13,6 +13,7 @@ import m.ilyina.find_trining.exception.BusinessRuleException;
 import m.ilyina.find_trining.exception.ConflictException;
 import m.ilyina.find_trining.exception.NotFoundException;
 import m.ilyina.find_trining.mapper.TrainingSlotMapper;
+import m.ilyina.find_trining.metrics.BusinessMetrics;
 import m.ilyina.find_trining.repository.CoachRepository;
 import m.ilyina.find_trining.repository.GymRepository;
 import m.ilyina.find_trining.repository.TrainingSlotRepository;
@@ -38,13 +39,15 @@ import java.util.List;
 public class TrainingSlotServiceImpl implements TrainingSlotService {
 
     private static final int FIRST_SLOT_HOUR = 10;
-    private static final int LAST_SLOT_START_HOUR = 22; // последний слот 22:00-23:00
+    private static final int LAST_SLOT_START_HOUR = 22;
 
     private final TrainingSlotRepository slotRepository;
     private final GymRepository gymRepository;
     private final CoachRepository coachRepository;
     private final UserRepository userRepository;
     private final TrainingSlotMapper slotMapper;
+
+    private final BusinessMetrics metrics;
 
     @Override
     @Transactional(readOnly = true)
@@ -92,6 +95,7 @@ public class TrainingSlotServiceImpl implements TrainingSlotService {
         slot.setStartsAt(request.startsAt());
 
         TrainingSlot saved = slotRepository.save(slot);
+        metrics.slotCreated();
         log.info("Training slot created: id={}, gymId={}, coachId={}, startsAt={}",
                 saved.getId(), gym.getId(), coach.getId(), saved.getStartsAt());
         return slotMapper.toResponse(saved);
@@ -105,6 +109,7 @@ public class TrainingSlotServiceImpl implements TrainingSlotService {
 
         if (slot.getBookedBy() != null) {
             log.warn("Attempt to book an already-taken slot: slotId={}", slotId);
+            metrics.bookingFailed("already_booked");
             throw new ConflictException("Слот уже забронирован");
         }
         if (slot.getStartsAt().isBefore(LocalDateTime.now())) {
@@ -118,6 +123,7 @@ public class TrainingSlotServiceImpl implements TrainingSlotService {
         slot.setBookedAt(LocalDateTime.now());
 
         TrainingSlot saved = slotRepository.save(slot);
+        metrics.slotBooked();
         log.info("Slot booked: slotId={}, userId={}", saved.getId(), user.getId());
         return slotMapper.toResponse(saved);
     }
@@ -127,6 +133,7 @@ public class TrainingSlotServiceImpl implements TrainingSlotService {
         TrainingSlot slot = getOrThrow(slotId);
 
         if (slot.getBookedBy() == null) {
+            metrics.bookingFailed("already_not_booked");
             throw new BusinessRuleException("Слот не забронирован - нечего отменять");
         }
         if (!slot.getBookedBy().getId().equals(userId)) {
@@ -141,6 +148,7 @@ public class TrainingSlotServiceImpl implements TrainingSlotService {
         slot.setBookedAt(null);
 
         TrainingSlot saved = slotRepository.save(slot);
+        metrics.slotUnBooked();
         log.info("Booking cancelled: slotId={}, userId={}", saved.getId(), userId);
         return slotMapper.toResponse(saved);
     }

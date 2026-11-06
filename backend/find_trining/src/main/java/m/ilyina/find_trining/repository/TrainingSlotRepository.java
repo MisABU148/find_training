@@ -17,4 +17,8 @@ public interface TrainingSlotRepository extends JpaRepository<TrainingSlot, Long
     boolean existsByCoachIdAndStartsAt(Long coachId, LocalDateTime startsAt);
 
     boolean existsByBookedByIdAndStartsAt(Long userId, LocalDateTime startsAt);
+
+    long countByBookedByIsNull();
+
+    long countByBookedByIsNotNull();
 }
