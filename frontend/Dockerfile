@@ -1,5 +1,4 @@
 
-# Сборка frontend
 FROM node:22-alpine AS build
 
 WORKDIR /app
@@ -10,7 +9,6 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
-# Раздача готовой сборки через Nginx
 FROM nginx:alpine
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
