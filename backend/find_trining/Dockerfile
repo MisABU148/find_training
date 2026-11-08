@@ -1,5 +1,4 @@
 
-# Этап сборки Java-приложения
 FROM maven:3.9-eclipse-temurin-25 AS build
 
 WORKDIR /app
@@ -11,7 +10,6 @@ COPY src ./src
 RUN mvn -B -DskipTests package \
     && cp target/find_trining-0.0.1-SNAPSHOT.jar /app/app.jar
 
-# Этап запуска
 FROM eclipse-temurin:25-jre
 
 WORKDIR /app
